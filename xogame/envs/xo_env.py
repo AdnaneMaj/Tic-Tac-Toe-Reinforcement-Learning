@@ -28,7 +28,7 @@ class XOGameEnv(gym.Env):
     def step(self, action):
 
         if self.done:
-            print("📢 Game is already finished. Please reset the environment.")
+            print("📢 Game has already finished. Please reset the environment.")
 
         if self.current_player == XOChoice.X.value:
             self.game.play(XOChoice.X, pos=action)
