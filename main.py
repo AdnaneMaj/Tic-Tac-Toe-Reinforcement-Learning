@@ -1,26 +1,37 @@
-from xogame.envs.game import XOGame, XOChoice
-import xogame
-import numpy as np
-
-import gym
+import tictacteo as tic
+import tictacteo.strategies as st
 
 
-env = xogame.envs.XOGameEnv()
+game = tic.TicTacTeoGame()
 
 done = False
-env.render()
 
-while True:
+# p = input("Choose Player: ")
+
+# if p.lower() == "x":
+#     player = tic.Player.X 
+# elif p.lower() == "o":
+#     player = tic.Player.O
+# else: 
+#     raise ValueError("Ligal players: 'x' 'o' ") 
+
+player = tic.Player(1)
+
+x_strategy = st.ValueIterationPolicy(player= tic.Player.X)
+o_strategy = st.RandomStrategy(player= tic.Player.O)
+
+while not done:
+
+    if player == x_strategy.player: 
+        pos = x_strategy.best_move(game=game)
+    else: 
+        pos = o_strategy.best_move(game=game)
+
+    done = game.step(player, pos)
+
+    game.render()
 
     if done: 
-        print("player: ", env.current_player, " win the game")
-        break
+        game.gui.game_over(player=player)
 
-    
-    print("Current player: ", "x" if env.current_player == 1 else "o")
-
-    pos = int(input("pos = "))
-
-    states, reward, done = env.step(action=pos)
-    
-    env.render()
+    player = game.next_player(player= player)
