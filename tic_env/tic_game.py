@@ -1,8 +1,6 @@
 from enum import Enum 
 
 
-from typing import Self
-
 class PlayerId(Enum):
     X: int = 1
     O: int = -1 
@@ -30,7 +28,7 @@ class State:
         return State(state= 0b000000000)
     
     @staticmethod
-    def draw_state() -> Self:
+    def draw_state():
         return State(state=0b111111111)
 
     @classmethod
