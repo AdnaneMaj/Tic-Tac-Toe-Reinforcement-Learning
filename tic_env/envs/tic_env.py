@@ -38,11 +38,10 @@ class TicTacToeEnv(gym.Env):
         if action in self.game.get_allowed_actions():
             self.game.cur_player.move(action=action)
             reward = self.game.get_reward()
+            self.game.change_player()
         else:
             reward = -3
         
-        self.game.change_player()
-
         obv = self.game.board_state.get_state().get()
 
         terminated = self.game.is_done()
