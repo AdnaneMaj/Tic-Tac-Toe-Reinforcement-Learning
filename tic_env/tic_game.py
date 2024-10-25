@@ -111,12 +111,12 @@ class TicTacToeGame:
     def get_reward(self):
 
         if self.is_winner(player=self.players[0]): # X wins
-            return 1
+            return 3
 
         elif self.is_winner(player=self.players[1]): # O wins
-            return -2
+            return -3
         
-        else: return -1
+        else: return 0
 
     def is_done(self):
 

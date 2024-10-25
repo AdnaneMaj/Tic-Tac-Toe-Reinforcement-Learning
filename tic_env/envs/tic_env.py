@@ -40,7 +40,7 @@ class TicTacToeEnv(gym.Env):
             reward = self.game.get_reward()
             self.game.change_player()
         else:
-            reward = -3
+            reward = -1
         
         obv = self.game.board_state.get_state().get()
 
