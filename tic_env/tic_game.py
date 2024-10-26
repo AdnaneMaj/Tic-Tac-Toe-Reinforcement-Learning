@@ -114,7 +114,7 @@ class TicTacToeGame:
             return 1
 
         elif self.is_winner(player=self.players[1]): # O wins
-            return -1
+            return -2
         
         else: return 0
 
