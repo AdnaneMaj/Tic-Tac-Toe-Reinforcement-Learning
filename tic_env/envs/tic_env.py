@@ -17,13 +17,18 @@ class TicTacToeEnv(gym.Env):
         self.action_space = gym.spaces.Discrete(start=1, n=9)
         self.observation_space = gym.spaces.Discrete(start=0, n=2**9-1)
 
+        self.nA = self.action_space.n
+        self.nS = self.observation_space.n 
+
+        self.P = {s: {a: [] for a in range(self.nA)} for s in range(self.nS)}
+
+
     def sample_action(self):
 
         allowed_actions = self.game.get_allowed_actions()
         return np.random.choice(
             a= allowed_actions, p= [1/len(allowed_actions)]*len(allowed_actions)
         )
- 
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
