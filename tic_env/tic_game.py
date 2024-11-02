@@ -128,6 +128,8 @@ class TicTacToeGame:
 
         elif self.is_draw(board_state=self.board_state):
             return -1
+        
+        else: return 0 
 
     def is_done(self):
 
