@@ -1,33 +1,24 @@
 import tic_env
+from tic_env.tic_game import PlayerId
 import gymnasium as gym
+
+from tic_env.warppers import MiniMaxEnv
 
 
 env = gym.make("tic_env/TicTacToe-v0").unwrapped
 
+menv = MiniMaxEnv(env=env)
+menv.reset(player_id=PlayerId.O)
 
-
-obv = env.reset()
-
-
-rewards = 0
+menv.render()
 
 done = False
 
-for i in range(3):
 
-    env.reset()
+while not done:
 
-    while not done:
+    action = int(input("> "))
 
-        action = env.sample_action()
+    menv.step(action=action)
 
-        # print(env.game.get_allowed_actions())
-        # print(action)
-
-        next_state, reward, done, _ = env.step(action=action)
-
-        rewards += reward
-
-        # env.render()
-
-print("Totale_rewards", rewards)
+    menv.render()

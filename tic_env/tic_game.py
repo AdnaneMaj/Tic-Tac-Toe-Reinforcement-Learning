@@ -1,5 +1,6 @@
 from enum import Enum 
 
+from copy import deepcopy
 
 class PlayerId(Enum):
     X: int = 1
@@ -45,10 +46,15 @@ class Player:
 
         self.state: State = state 
         self.id: PlayerId = id
+        self.old_state = deepcopy(self.state)
 
     def move(self, action: int):
         action -= 1
+        self.old_state = deepcopy(self.state)
         self.state = State(state= (self.state.get() | (1 << action)))
+
+    def undo(self):
+        self.state = deepcopy(self.old_state)
 
     def __repr__(self):
         return f"<Player: id={self.id}>"
@@ -60,7 +66,7 @@ class BoardState:
         
         self.players: list[Player] = players
 
-    def get_state(self, ):
+    def get_state(self):
         return State(state= (self.players[0].state.get() | self.players[1].state.get()))
 
     def allowed_actions(self):
@@ -83,10 +89,10 @@ class TicTacToeGame:
 
         self.players: list[Player] = [
             Player(
-                id= PlayerId.X, state= State.reset()
+                id= PlayerId.O, state= State.reset()
             ),
             Player(
-                id= PlayerId.O, state= State.reset()
+                id= PlayerId.X, state= State.reset()
             )
         ]
 
@@ -99,6 +105,10 @@ class TicTacToeGame:
     def change_player(self):
         self.cur_player_id = PlayerId(self.cur_player_id.value * -1)
 
+    def undo_action(self):
+        self.change_player()
+        self.cur_player.undo()
+
     def is_winner(self, player: Player):
         for win in State.win_states():
             if (player.state.get() & win.get()) == win.get():
@@ -110,13 +120,14 @@ class TicTacToeGame:
 
     def get_reward(self):
 
-        if self.is_winner(player=self.players[0]): # X wins
+        if self.is_winner(player=self.players[0]): # O wins
             return 1
 
-        elif self.is_winner(player=self.players[1]): # O wins
+        elif self.is_winner(player=self.players[1]): # X wins
             return -2
-        
-        else: return 0
+
+        elif self.is_draw(board_state=self.board_state):
+            return -1
 
     def is_done(self):
 

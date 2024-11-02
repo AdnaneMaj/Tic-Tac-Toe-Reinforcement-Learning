@@ -30,22 +30,26 @@ class TicTacToeEnv(gym.Env):
             a= allowed_actions, p= [1/len(allowed_actions)]*len(allowed_actions)
         )
 
-    def reset(self, seed=None, options=None):
+    def reset(self, player_id: PlayerId = PlayerId.O, seed=None, options=None):
         super().reset(seed=seed)
         
         self.game.reset()
 
+        self.game.cur_player_id = player_id
+
         return self.game.board_state.get_state().get()
+    
+    def undo_action(self):
+
+        self.game.undo_action()
     
 
     def step(self, action: int):
 
-        if action in self.game.get_allowed_actions():
-            self.game.cur_player.move(action=action)
-            reward = self.game.get_reward()
-            self.game.change_player()
-        else:
-            reward = -1
+        self.game.cur_player.move(action=action)
+        reward = self.game.get_reward()
+
+        self.game.change_player()
         
         obv = self.game.board_state.get_state().get()
 
