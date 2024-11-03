@@ -115,8 +115,8 @@ class TicTacToeGame:
                 return True
         return False
 
-    def is_draw(self, board_state: BoardState):
-        return board_state.get_state().get() == State.draw_state().get() 
+    def is_draw(self):
+        return self.board_state.get_state().get() == State.draw_state().get() 
 
     def get_reward(self):
 
@@ -126,7 +126,7 @@ class TicTacToeGame:
         elif self.is_winner(player=self.players[1]): # X wins
             return -2
 
-        elif self.is_draw(board_state=self.board_state):
+        elif self.is_draw():
             return -1
         
         else: return 0 
@@ -134,7 +134,7 @@ class TicTacToeGame:
     def is_done(self):
 
         return (
-            any(self.is_winner(player) for player in self.players) or self.is_draw(self.board_state)
+            any(self.is_winner(player) for player in self.players) or self.is_draw()
         )
 
     def get_allowed_actions(self):
